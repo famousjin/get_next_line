@@ -94,14 +94,21 @@ char	*ft_copy_buffer(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save;//엔터 다음 단어부터 시작
+	static char	*save[257];//엔터 다음 단어부터 시작
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
 		return (0);
-	save = ft_copy_buffer(fd, save);//버퍼에 자료를 저장해 놓음
-	if (!save)
+	save[fd] = ft_copy_buffer(fd, save[fd]);//버퍼에 자료를 저장해 놓음
+	if (!save[fd])
 		return (NULL);
-	line = ft_get_line(save);//실제로 출력할 라인 저장
-	save = ft_save(save);//어디까지 출력했는지 static으로 save에 저장해줌
+	line = ft_get_line(save[fd]);//실제로 출력할 라인 저장
+	save[fd] = ft_save(save[fd]);//어디까지 출력했는지 static으로 save에 저장해줌
 	return (line);
 }
+/*
+# ifdef __GNU__
+#  define PATH_MAX 4096
+#  define MAXPATHLEN 4096
+#  define OPEN_MAX 256 -> We define a reasonable limit.
+# endif
+*/
