@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_get_line(char *save)
 {
@@ -67,7 +67,6 @@ char	*ft_save(char *save)
 }
 
 char	*ft_copy_buffer(int fd, char *save)
-//그냥 버퍼에 저장하는 역할
 {
 	char	*buffer;
 	int		read_bytes;
@@ -76,7 +75,7 @@ char	*ft_copy_buffer(int fd, char *save)
 	if (!buffer)
 		return (NULL);
 	read_bytes = 1;
-	while (!ft_strchr(save, '\n') && read_bytes != 0)//엔터를 찾은곳에서 멈춤
+	while (!ft_strchr(save, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes == -1)
@@ -94,15 +93,15 @@ char	*ft_copy_buffer(int fd, char *save)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*save[257];//엔터 다음 단어부터 시작
+	static char	*save[257];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
 		return (0);
-	save[fd] = ft_copy_buffer(fd, save[fd]);//버퍼에 자료를 저장해 놓음
+	save[fd] = ft_copy_buffer(fd, save[fd]);
 	if (!save[fd])
 		return (NULL);
-	line = ft_get_line(save[fd]);//실제로 출력할 라인 저장
-	save[fd] = ft_save(save[fd]);//어디까지 출력했는지 static으로 save에 저장해줌
+	line = ft_get_line(save[fd]);
+	save[fd] = ft_save(save[fd]);
 	return (line);
 }
 /*
